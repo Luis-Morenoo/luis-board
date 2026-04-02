@@ -1,6 +1,6 @@
 # 📋 Luis's Board
 
-A full-stack personal Kanban ticketing app built with **React** and **Firebase** — featuring real-time sync, Google authentication, and a public read-only view for sharing progress with recruiters.
+A full-stack personal Kanban ticketing app built with **React** and **Firebase** — featuring real-time sync, Google authentication, public/private ticket visibility, mobile-responsive design, and automated CI/CD deployment via GitHub Actions.
 
 🔗 **Live App:** [luis-morenoo.github.io/luis-board](https://luis-morenoo.github.io/luis-board/)  
 👁️ **Read-Only View:** [luis-morenoo.github.io/luis-board/#/view](https://luis-morenoo.github.io/luis-board/#/view)
@@ -16,6 +16,8 @@ A full-stack personal Kanban ticketing app built with **React** and **Firebase**
 - **Tag Filtering** — Filter by Job Search, Study, ASU, Finance, Personal, and more
 - **Priority Levels** — High, Medium, Low with color-coded badges
 - **Read-Only View** — Shareable link for recruiters — no login required
+- **Mobile Responsive** — Stacked collapsible columns and bottom sheet modal on mobile
+- **Automated Deployment** — GitHub Actions CI/CD deploys on every push to main
 
 ---
 
@@ -27,7 +29,9 @@ A full-stack personal Kanban ticketing app built with **React** and **Firebase**
 | Database | Firebase Firestore (real-time NoSQL) |
 | Auth | Firebase Authentication (Google OAuth) |
 | Analytics | Firebase Analytics |
+| CI/CD | GitHub Actions |
 | Hosting | GitHub Pages |
+| Dev Environment | VS Code |
 | Version Control | Git + GitHub |
 
 ---
@@ -49,8 +53,19 @@ npm run dev
 
 Open `http://localhost:5173/luis-board/` in your browser.
 
-### Environment
-Firebase config is set in `src/firebase.js`. Update with your own Firebase project credentials if forking.
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+```
 
 ---
 
@@ -64,22 +79,21 @@ allow write: if request.auth != null
   && request.auth.token.email == "OWNER_EMAIL";  // Owner only
 ```
 
-The `#/view` route skips authentication entirely and shows only tickets marked **Public**.
+Firebase credentials are stored in `.env` locally and as **GitHub Actions secrets** for automated builds — never hardcoded in source code.
 
 ---
 
-## 📦 Deployment
+## ⚙️ CI/CD Pipeline
 
-This project deploys to GitHub Pages using a manual `git subtree` approach (more reliable on Windows than the `gh-pages` package):
+Every push to `main` triggers the GitHub Actions workflow:
 
-```bash
-npm run build
-git add dist/ -f
-git commit -m "deploy"
-git subtree push --prefix dist origin gh-pages
-```
+1. Checkout code
+2. Setup Node.js 20
+3. Install dependencies
+4. Build with Firebase secrets injected as environment variables
+5. Deploy `dist/` to `gh-pages` branch via `peaceiris/actions-gh-pages`
 
-The `main` branch holds source code. The `gh-pages` branch holds the compiled build.
+Workflow file: `.github/workflows/deploy.yml`
 
 ---
 
@@ -87,13 +101,18 @@ The `main` branch holds source code. The `gh-pages` branch holds the compiled bu
 
 ```
 luis-board/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml       # GitHub Actions CI/CD
 ├── src/
-│   ├── App.jsx          # Main app — routing, auth, board, modals
-│   ├── firebase.js      # Firebase config and exports
-│   └── main.jsx         # React entry point
-├── index.html           # HTML shell
-├── vite.config.js       # Vite config with GitHub Pages base path
-├── firestore.rules      # Firestore security rules
+│   ├── App.jsx              # Main app — routing, auth, board, modals
+│   ├── firebase.js          # Firebase config (reads from .env)
+│   └── main.jsx             # React entry point
+├── index.html               # HTML shell
+├── vite.config.js           # Vite config with GitHub Pages base path
+├── firestore.rules          # Firestore security rules
+├── .env                     # Firebase credentials (not committed)
+├── .gitignore               # Excludes node_modules, dist, .env
 └── package.json
 ```
 
@@ -105,7 +124,8 @@ luis-board/
 - [ ] Due dates with overdue indicators
 - [ ] Full-text ticket search
 - [ ] Multiple boards
-- [ ] Mobile app (React Native)
+- [ ] Role-based access for collaborators
+- [ ] React Native mobile app
 
 ---
 
@@ -117,3 +137,4 @@ Actively seeking roles in IT Infrastructure, Data Center Operations, and Cyberse
 
 [![GitHub](https://img.shields.io/badge/GitHub-Luis--Morenoo-181717?style=flat&logo=github)](https://github.com/Luis-Morenoo)
 [![Email](https://img.shields.io/badge/Email-luismorenosofteng%40gmail.com-blue?style=flat&logo=gmail)](mailto:luismorenosofteng@gmail.com)
+[![Live App](https://img.shields.io/badge/Live%20App-luis--board-3B82F6?style=flat&logo=github)](https://luis-morenoo.github.io/luis-board/)

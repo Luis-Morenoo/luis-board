@@ -133,7 +133,7 @@ luis-board/
 
 Built by **Luis Moreno** — Computer Engineering graduate, former SWE Associate at Wells Fargo, currently pursuing an **MS in Computer Science (Cybersecurity concentration)** at Arizona State University.
 
-Actively seeking roles in IT Infrastructure, Data Center Operations, and Cybersecurity (GRC / SOC).
+Actively seeking roles in Junior SWE, IT Infrastructure, Data Center Operations, and Cybersecurity, entry SRE, junior DevOps.
 
 [![GitHub](https://img.shields.io/badge/GitHub-Luis--Morenoo-181717?style=flat&logo=github)](https://github.com/Luis-Morenoo)
 [![Email](https://img.shields.io/badge/Email-luismorenosofteng%40gmail.com-blue?style=flat&logo=gmail)](mailto:luismorenosofteng@gmail.com)
